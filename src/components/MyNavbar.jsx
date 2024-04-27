@@ -14,8 +14,8 @@ const MyNavbar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto NavLeft">
-              <Nav.Link className="active">Home</Nav.Link>
-              <Nav.Link>TV show</Nav.Link>
+              <Nav.Link>Home</Nav.Link>
+              <Nav.Link className="active">TV show</Nav.Link>
               <Nav.Link>Movies</Nav.Link>
               <Nav.Link>Recently Added</Nav.Link>
               <Nav.Link>My List</Nav.Link>

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Spinner } from "react-bootstrap";
 import Image from "react-bootstrap/Image";
 import React from "react";
 import Slider from "react-slick";
@@ -42,8 +42,10 @@ class GalleryOne extends Component {
       ],
     },
     films: [],
+    isLoading: false,
   };
   fetchFilms = (props) => {
+    this.setState({ isLoading: true });
     fetch("http://www.omdbapi.com/?apikey=266a7ae8&s=" + this.props.filmName)
       .then((response) => {
         if (response.ok) {
@@ -58,7 +60,8 @@ class GalleryOne extends Component {
       })
       .catch((err) => {
         console.log(err);
-      });
+      })
+      .finally(() => this.setState({ isLoading: false }));
   };
 
   componentDidMount() {
@@ -69,21 +72,30 @@ class GalleryOne extends Component {
     return (
       <div className="bg-dark pt-3 pb-3">
         <h3 className="text-light px-4"> {this.props.galleryTitle}</h3>
+
+        {this.state.isLoading && (
+          <div className="text-center loaderContainer">
+            <Spinner animation="border" variant="danger" />
+          </div>
+        )}
+
         <div className="slider-container">
-          <Slider {...this.state.settings}>
-            {this.state.films.map((film) => {
-              return (
-                <Row key={film.imdbID}>
-                  <Col className="p-0 position-relative">
-                    <Image src={film.Poster} className="img-fluid imageFilmPoster" />
-                    <span className="netflixLogo">
-                      <Image src={netflixLogo}></Image>
-                    </span>
-                  </Col>
-                </Row>
-              );
-            })}
-          </Slider>
+          {this.state.films.length > 0 && !this.state.isLoading && (
+            <Slider {...this.state.settings}>
+              {this.state.films.map((film) => {
+                return (
+                  <Row key={film.imdbID}>
+                    <Col className="p-0 position-relative">
+                      <Image src={film.Poster} className="img-fluid imageFilmPoster" />
+                      <span className="netflixLogo">
+                        <Image src={netflixLogo}></Image>
+                      </span>
+                    </Col>
+                  </Row>
+                );
+              })}
+            </Slider>
+          )}
         </div>
       </div>
     );
